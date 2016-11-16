@@ -6,17 +6,12 @@
 #include "PyTree.h"
 using namespace boost::python;
 
-void SecureTrie::setRoot(h256 const& _r)
-{
-    m_tree.setRoot(_r);
-}
-
 BOOST_PYTHON_MODULE(PyTree)
 {
     class_<bytes>("bytes")
         .def(vector_indexing_suite<bytes>());
-    class_<SecureTrie>("SecureTrie")
-        .def("setRoot", &SecureTrie::setRoot)
+    class_<SecureTrie>("SecureTrie", init<PyLevelDB *>())
+        .def("getRoot", &SecureTrie::getRoot)
         .def("get", &SecureTrie::get)
         .def("update", &SecureTrie::update)
         .def("remove", &SecureTrie::remove);
