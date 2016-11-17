@@ -38,9 +38,11 @@ public:
     SecureTrie(PyLevelDB *db) : m_db(OverlayDB(db->_db)) {}
     SecureTrie(std::string genesis_hash) : m_db(openDB(h256(genesis_hash, h256::FromBinary))), m_tree(&m_db) {m_tree.setRoot(h256(genesis_hash, h256::FromBinary));}
     std::string getRoot() const { return m_tree.root().hex(); };
-    std::string get(std::string k) const { return m_tree.at(Address(k)); }
-    void update(std::string k, std::string value) { m_tree.insert(Address(k), value); }
-    void remove(std::string k) { m_tree.remove(Address(k)); }
+    std::string get(std::string k) const { return m_tree.at(Address(k, Address::FromBinary)); }
+    void update(std::string k, std::string value) { m_tree.insert(Address(k, Address::FromBinary), value); }
+    void remove(std::string k) { m_tree.remove(Address(k, Address::FromBinary)); }
+    bool root_hash_valid() {return !m_tree.isNull();}
+    void commit() { m_db.commit();}
 };
 
 #endif

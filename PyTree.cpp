@@ -50,5 +50,7 @@ BOOST_PYTHON_MODULE(PyTree)
         .def("getRoot", &SecureTrie::getRoot)
         .def("get", &SecureTrie::get)
         .def("update", &SecureTrie::update)
-        .def("remove", &SecureTrie::remove);
+        .def("delete", &SecureTrie::remove)
+        .def("root_hash_valid", &SecureTrie::root_hash_valid)
+        .def("commit", &SecureTrie::commit);
 }
