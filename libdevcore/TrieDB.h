@@ -83,7 +83,7 @@ public:
 			if (m_root == c_shaNull && !m_db->exists(m_root))
 				init();
 		}
-		/*std::cout << "Setting root to " << _root << " (patched to " << m_root << ")" << std::endl;*/
+        std::cout << "Setting root to " << _root << " (patched to " << m_root << ")" << std::endl;
 #if ETH_DEBUG
 		if (_v == Verification::Normal)
 #endif
