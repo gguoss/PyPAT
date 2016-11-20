@@ -77,8 +77,10 @@ bool MemoryDB::exists(h256 const& _h) const
 	ReadGuard l(x_this);
 #endif
 	auto it = m_main.find(_h);
-	if (it != m_main.end() && (!m_enforceRefs || it->second.second > 0))
-		return true;
+	//if (it != m_main.end() && (!m_enforceRefs || it->second.second > 0))
+//		return true;
+	if (it != m_main.end())
+        return true;
 	return false;
 }
 

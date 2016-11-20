@@ -36,7 +36,7 @@ public:
 	OverlayDB(ldb::DB* _db = nullptr): m_db(_db) {}
 	~OverlayDB();
 
-	ldb::DB* db() const { return m_db.get(); }
+	ldb::DB* db() const { return m_db; }
 
 	void commit();
 	void rollback();
@@ -51,7 +51,7 @@ public:
 private:
 	using MemoryDB::clear;
 
-	std::shared_ptr<ldb::DB> m_db;
+	ldb::DB *m_db;
 
 	ldb::ReadOptions m_readOptions;
 	ldb::WriteOptions m_writeOptions;

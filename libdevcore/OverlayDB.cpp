@@ -34,8 +34,9 @@ h256 const EmptyTrie = sha3(rlp(""));
 
 OverlayDB::~OverlayDB()
 {
-	if (m_db.use_count() == 1 && m_db.get())
-		ctrace << "Closing state DB";
+	/*if (m_db.use_count() == 1 && m_db.get())
+		ctrace << "Closing state DB";*/
+    m_db = nullptr;
 }
 
 class WriteBatchNoter: public ldb::WriteBatch::Handler

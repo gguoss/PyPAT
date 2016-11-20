@@ -22,6 +22,7 @@
 #pragma once
 
 #include <memory>
+#include <assert.h>
 #include "db.h"
 #include "Common.h"
 #include "Log.h"
@@ -80,6 +81,7 @@ public:
 		m_root = _root;
 		if (_v == Verification::Normal)
 		{
+            assert(m_db != nullptr);
 			if (m_root == c_shaNull && !m_db->exists(m_root))
 				init();
 		}
@@ -291,7 +293,7 @@ private:
 
 	// These are low-level node insertion functions that just go straight through into the DB.
 	h256 forceInsertNode(bytesConstRef _v) { auto h = sha3(_v); forceInsertNode(h, _v); return h; }
-	void forceInsertNode(h256 const& _h, bytesConstRef _v) { m_db->insert(_h, _v); }
+	void forceInsertNode(h256 const& _h, bytesConstRef _v) { m_db->insert(_h, _v); std::cout<<"_h:"<<_h<<"---_v:"<<_v.toString()<<std::endl;}
 	void forceKillNode(h256 const& _h) { m_db->kill(_h); }
 
 	// This are semantically-aware node insertion functions that only kills when the node's
@@ -764,6 +766,7 @@ template <class DB> void GenericTrieDB<DB>::insert(bytesConstRef _key, bytesCons
 
 	std::string rootValue = node(m_root);
 	assert(rootValue.size());
+    std::cout << "Insert" << toHex(_key.cropped(0, 4)) << "=>" << toHex(_value) <<std::endl;
 	bytes b = mergeAt(RLP(rootValue), m_root, NibbleSlice(_key), _value);
 
 	// mergeAt won't attempt to delete the node if it's less than 32 bytes
@@ -822,6 +825,7 @@ template <class DB> bytes GenericTrieDB<DB>::mergeAt(RLP const& _orig, h256 cons
 	tdebug << "mergeAt " << _orig << _k << sha3(_orig.data());
 #endif
 
+    //std::cout << "mergeAt " << _orig << _k << sha3(_orig.data()) << std::endl;
 	// The caller will make sure that the bytes are inserted properly.
 	// - This might mean inserting an entry into m_over
 	// We will take care to ensure that (our reference to) _orig is killed.
@@ -853,7 +857,7 @@ template <class DB> bytes GenericTrieDB<DB>::mergeAt(RLP const& _orig, h256 cons
 		}
 
 		auto sh = _k.shared(k);
-//		std::cout << _k << " sh " << k << " = " << sh << std::endl;
+		std::cout << "--cpp 2 item." <<  _k << " sh " << k << " = " << sh << std::endl;
 		if (sh)
 		{
 			// shared stuff - cleve at disagreement.
@@ -871,6 +875,7 @@ template <class DB> bytes GenericTrieDB<DB>::mergeAt(RLP const& _orig, h256 cons
 	{
 		// branch...
 
+        std::cout<<"--cpp 17 item."<<std::endl;
 		// exactly our node - place value.
 		if (_k.size() == 0)
 			return place(_orig, _k, _v);
@@ -1073,6 +1078,7 @@ template <class DB> bytes GenericTrieDB<DB>::place(RLP const& _orig, NibbleSlice
 	tdebug << "place " << _orig << _k;
 #endif
 
+    std::cout << "place " << _orig << _k;
 	killNode(_orig);
 	if (_orig.isEmpty())
 		return rlpList(hexPrefixEncode(_k, true), _s);
