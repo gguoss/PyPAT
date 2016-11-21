@@ -65,19 +65,19 @@ def run_test(name, pairs):
             if v is not None:
                 #t1.update(str(k.encode('utf-8')), str(v.encode('utf-8')))
                 #print "python Trie root hash:" + encode_hex(t1.root_hash)
-                t.update(str(k.encode('utf-8')), str(v.encode('utf-8')))
+                t.update(k, v)
                 print "SecureTrie root hash:" + t.getRoot()
             else:
-                t.delete(str(k.encode('utf-8')))
+                t.delete(k)
                 #t1.delete(str(k.encode('utf-8')))
         # make sure we have deletes at the end
         for k, v in deletes:
-            t.delete(str(k.encode('utf-8')))
-        print "root_hash:" + t.getRoot()
+            t.delete(k)
+        print "root_hash:" + encode_hex(t.state_root)
         print "pairs['root']" + pairs['root']
-        if pairs['root'] != b'0x' + t.getRoot():
+        if pairs['root'] != b'0x' + encode_hex(t.state_root):
             raise Exception("Mismatch: %r %r %r %r" % (
-                name, pairs['root'], b'0x' + t.getRoot(), (i, list(permut) + deletes)))
+                name, pairs['root'], b'0x' + encode_hex(t.state_root), (i, list(permut) + deletes)))
 
 
 if __name__ == '__main__':
