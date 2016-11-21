@@ -34,10 +34,17 @@ class SecureTrie {
     OverlayDB m_db;
     GenericTrieDB<OverlayDB> m_tree;
 public:
-    SecureTrie(PyObject *db, PyObject *root_hash) : m_db(OverlayDB(((PyLevelDB *)db)->_db)), m_tree(&m_db) {m_tree.setRoot(h256(PyString_AsString(root_hash), h256::FromBinary));}
+    SecureTrie(PyObject *db, PyObject *root_hash) : m_db(OverlayDB(((PyLevelDB *)db)->_db)), m_tree(&m_db)
+    {
+        m_tree.setRoot(h256(PyString_AsString(root_hash), h256::FromBinary));
+    }
     SecureTrie(PyLevelDB *db) : m_db(OverlayDB(db->_db)) {}
     SecureTrie(std::string genesis_hash) : m_db(openDB(h256(genesis_hash, h256::FromBinary))), m_tree(&m_db) {m_tree.setRoot(h256(genesis_hash, h256::FromBinary));}
     PyObject* getRoot() const { return PyString_FromStringAndSize((const char *)(m_tree.root().data()), 32); }
+    void setRoot(PyObject *root_hash)
+    {
+        m_tree.setRoot(h256(PyString_AsString(root_hash), h256::FromBinary));
+    }
     PyObject* get(PyObject *k) const
     { 
         char *data = PyString_AsString(k);
