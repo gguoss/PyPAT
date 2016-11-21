@@ -44,7 +44,7 @@ BOOST_PYTHON_MODULE(PyTree)
 {
     class_<bytes>("bytes")
         .def(vector_indexing_suite<bytes>());
-    class_<SecureTrie>("SecureTrie", init<PyObject *, std::string>())
+    class_<SecureTrie>("SecureTrie", init<PyObject *, PyObject *>())
         .def(init<PyLevelDB *>())
         .def(init<std::string>())
         .def("getRoot", &SecureTrie::getRoot)

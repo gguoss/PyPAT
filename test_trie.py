@@ -55,7 +55,7 @@ def run_test(name, pairs):
     for i, permut in enumerate(itertools.permutations(pairs['in'])):
         if i > N_PERMUTATIONS:
             break
-        t1 = trie.Trie(db.EphemDB())
+        #t1 = trie.Trie(db.EphemDB())
         rlpnull = utils.sha3rlp(b'')
         t = PyTree.SecureTrie(ldb, rlpnull)
         print "SecureTrie root hash:" + t.getRoot()
@@ -63,13 +63,13 @@ def run_test(name, pairs):
         for k, v in permut:
             #print 'updating with k:%s v:' %(encode_hex(k))
             if v is not None:
-                t1.update(str(k.encode('utf-8')), str(v.encode('utf-8')))
+                #t1.update(str(k.encode('utf-8')), str(v.encode('utf-8')))
                 #print "python Trie root hash:" + encode_hex(t1.root_hash)
                 t.update(str(k.encode('utf-8')), str(v.encode('utf-8')))
                 print "SecureTrie root hash:" + t.getRoot()
             else:
                 t.delete(str(k.encode('utf-8')))
-                t1.delete(str(k.encode('utf-8')))
+                #t1.delete(str(k.encode('utf-8')))
         # make sure we have deletes at the end
         for k, v in deletes:
             t.delete(str(k.encode('utf-8')))
